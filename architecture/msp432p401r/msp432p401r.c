@@ -14,12 +14,17 @@
 #include "include/error.h"
 #include "architecture/platforms.h"
 
+
 err_t platform_proc_init()
 {
+    WDTCTL = WDTPW | WDTHOLD;   // Disable the watchdog timer
+
+
+
     return SUCCESS;
 }
 
-err_t platform_set_systclk(uint32_t hertz)
+err_t platform_set_sysclk(uint32_t hertz)
 {
     return SUCCESS;
 }

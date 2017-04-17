@@ -35,8 +35,24 @@
 /**
  * API Implementation
  */
+
+/**
+ * @brief Complete any processor-specific initialization
+ *
+ * Outcomes:
+ * - Watchdog timer disabled
+ * - Global interrupts enabled
+ *
+ * @return A {@link err_t system error code}
+ */
 extern err_t platform_proc_init();
-extern err_t platform_set_systclk(uint32_t hertz);
+
+/**
+ * @brief Set main system clock in hertz.
+ * @param hertz Desired processor speed in Hz
+ * @return A {@link err_t system error code}
+ */
+extern err_t platform_set_sysclk(uint32_t hertz);
 
 
 
