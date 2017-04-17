@@ -23,6 +23,7 @@
  */
 #if defined (__MSP432P401R__)
 #include <msp432p401r.h>
+#include "architecture/msp432p401r/msp432p401r.h"
 
 #elif defined (__MSP430F5529__)
 #include <msp430f5529.h>
