@@ -1,9 +1,9 @@
 /**
- * @file platforms.h
+ * @file platform.h
  * @author Jesse Cureton (jlcvm6@mst.edu)
  * @date 16 April 2017
  * @copyright Copyright 2017 - Jesse Cureton. All rights reserved.
- * @license
+ * @license This project is released under the GNU Public License (GPLv3).
  *
  * @brief Nested-import configurations for supported microcontrollers
  *

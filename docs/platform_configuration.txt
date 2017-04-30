@@ -3,7 +3,7 @@
  * @author Jesse Cureton (jlcvm6@mst.edu)
  * @date 16 April 2017
  * @copyright Copyright 2017 - Jesse Cureton. All rights reserved.
- * @license
+ * @license This project is released under the GNU Public License (GPLv3).
  * 
  * @page PLATFORM_CONFIGURATION Platform Configuration
  * 
@@ -16,7 +16,7 @@
  * results.
  * \n\n
  * This is known as the platform API, and it is requires implementation of the following function protoypes. Full
- * documentation for each can be seen in {@link platforms.h} or by following the function links below.
+ * documentation for each can be seen in {@link platform.h} or by following the function links below.
  * 
  * 1. <code>err_t platform_proc_init()</code>
  * 2. <code>err_t platform_set_sysclk(uint32_t hertz)</code>
