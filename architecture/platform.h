@@ -1,9 +1,9 @@
 /**
- * @file platforms.h
+ * @file platform.h
  * @author Jesse Cureton (jlcvm6@mst.edu)
  * @date 16 April 2017
  * @copyright Copyright 2017 - Jesse Cureton. All rights reserved.
- * @license
+ * @license This project is released under the GNU Public License (GPLv3).
  *
  * @brief Nested-import configurations for supported microcontrollers
  *
@@ -35,8 +35,24 @@
 /**
  * API Implementation
  */
+
+/**
+ * @brief Complete any processor-specific initialization
+ *
+ * Outcomes:
+ * - Watchdog timer disabled
+ * - Global interrupts enabled
+ *
+ * @return A {@link err_t system error code}
+ */
 extern err_t platform_proc_init();
-extern err_t platform_set_systclk(uint32_t hertz);
+
+/**
+ * @brief Set main system clock in hertz.
+ * @param hertz Desired processor speed in Hz
+ * @return A {@link err_t system error code}
+ */
+extern err_t platform_set_sysclk(uint32_t hertz);
 
 
 

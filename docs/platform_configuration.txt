@@ -3,7 +3,7 @@
  * @author Jesse Cureton (jlcvm6@mst.edu)
  * @date 16 April 2017
  * @copyright Copyright 2017 - Jesse Cureton. All rights reserved.
- * @license
+ * @license This project is released under the GNU Public License (GPLv3).
  * 
  * @page PLATFORM_CONFIGURATION Platform Configuration
  * 
@@ -15,23 +15,11 @@
  * available, doing the proper platform initialization, etc. These must be named consistently, and have consistent
  * results.
  * \n\n
- * This is known as the platform API, and it is requires implementation of the following functions
+ * This is known as the platform API, and it is requires implementation of the following function protoypes. Full
+ * documentation for each can be seen in {@link platform.h} or by following the function links below.
  * 
- * @subsection API_PROC_INIT Processor Initialization: platform_proc_init()
- * <strong>Prototype:</strong><code>err_t platform_proc_init()</code><br>
- * Complete any processor-specific initialization.<br>
- * <strong>Outcome:</strong>
- * - Watchdog timer disabled
- * - Global interrupts enabled
- * 
- * @subsection API_SET_SYSCLK Set System Clock: platform_set_sysclk()
- * <strong>Prototype:</strong><code>err_t platform_set_sysclk(uint32_t hertz)</code><br>
- * Set main system clock in hertz<br>
- * <strong>Parameters:</strong>
- * - <code>hertz</code> - Desired processor speed in hertz<br>
- * 
- * <strong>Outcome:</strong>
- * - System clock (typically MCLK) set to <code>hertz</code>
+ * 1. <code>err_t platform_proc_init()</code>
+ * 2. <code>err_t platform_set_sysclk(uint32_t hertz)</code>
  * 
  * @section NEW_PLATFORMS Building for New Platforms
  */
