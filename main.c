@@ -9,15 +9,25 @@
  * @brief Primary OS entry point, initialization, and loop
  */
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "include/error.h"
 #include "architecture/platform.h"
+#include "scheduler/scheduler.h"
 
 int main(void)
 {
     platform_proc_init();
 
-    platform_set_sysclk(20000000);
+    platform_set_sysclk(24000000);
+
+    // Execute all available tasks, then put the processor to sleep
+    // until its awoken by an interrupt and repeats
+    while(1)
+    {
+    	schServiceTasks();
+    	platform_proc_sleep();
+    }
 	
     return 0;
 }
