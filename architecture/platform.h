@@ -27,6 +27,7 @@
 
 #elif defined (__MSP430F5529__)
 #include <msp430f5529.h>
+#include "architecture/msp430f5529/msp430f5529.h"
 
 #else
 #error "Attempting to build for unsupported microcontroller!"
