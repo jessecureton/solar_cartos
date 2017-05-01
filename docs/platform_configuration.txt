@@ -20,6 +20,10 @@
  * 
  * 1. <code>err_t platform_proc_init()</code>
  * 2. <code>err_t platform_set_sysclk(uint32_t hertz)</code>
+ *
+ * The platform API also defines some standard wide-scope variables for system status. They are as follows
+ * 
+ * 1. {@link platform_sysclk}
  * 
  * @section NEW_PLATFORMS Building for New Platforms
  */
