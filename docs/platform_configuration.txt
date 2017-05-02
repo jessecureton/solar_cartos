@@ -20,6 +20,10 @@
  * 
  * 1. <code>err_t platform_proc_init()</code>
  * 2. <code>err_t platform_set_sysclk(uint32_t hertz)</code>
+ * 3. <code>void platform_proc_sleep()</code>
+ * 4. <code>void platform_sch_tick()</code> - This doesn't need to be named as such, but there must be some
+ *      platform-specific interrupt triggered by a timer at the desired SCH_TICK rate (typically 1ms), and it
+ *      must call {@link schInterrupt()} after dealing with any platform-specific wake from sleep code.
  *
  * The platform API also defines some standard wide-scope variables for system status. They are as follows
  * 

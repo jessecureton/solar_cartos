@@ -48,7 +48,7 @@ extern uint32_t PLATFORM_SYSCLK;
  * Outcomes:
  * - Watchdog timer disabled
  * - Global interrupts enabled
- * - {@link platform_sysclk} updated to default speed for processor at RESET
+ * - {@link PLATFORM_SYSCLK} updated to default speed for processor at RESET
  *
  * @return A {@link err_t system error code}
  */
@@ -57,11 +57,20 @@ extern err_t platform_proc_init();
 /**
  * @brief Set main system clock (typically MCLK) as close as possible to the given value in hertz.
  *
- * Once the frequency has been set, {@link platform_sysclk} will be set to the new clock speed
+ * Once the frequency has been set, {@link PLATFORM_SYSCLK} will be set to the new clock speed
  *
  * @param hertz Desired processor speed in Hz
  * @return A {@link err_t system error code}
  */
 extern err_t platform_set_sysclk(uint32_t hertz);
+
+/**
+ * @brief Put the processor to sleep while there is no useful work to be done
+ *
+ * This can be any low-power sleep mode desired so long as it can wake on the scheduler timer interrupt.
+ *
+ * If you don't wish for the processor to sleep when there is no work to do, simply return.
+ */
+extern void platform_proc_sleep();
 
 #endif /* INCLUDE_PLATFORMS_H_ */
