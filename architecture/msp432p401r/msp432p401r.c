@@ -37,7 +37,7 @@ err_t platform_set_sysclk(uint32_t hertz)
 	// Error out if we are out of bounds
 	if(hertz > CLK_FREQ_MAX || hertz < CLK_FREQ_MIN) return EPARAMINVAL;
 
-	// Unlock the clock registers
+	// Unlock the clock registers to set the new speed
 	CS->KEY = CS_KEY_VAL;
 
 	// Find closest DCO center frequency per TI SLAU356F doc Table 5-4
@@ -80,7 +80,38 @@ err_t platform_set_sysclk(uint32_t hertz)
 	// Calculate actual clock frequency we just set and store that, since it may not be exact
 	PLATFORM_SYSCLK = (1500000*(1<<dcorsel))/( 1 - ((kdcoconst*dcotune)/(1+kdcoconst*(768-fcal))));
 
+	// Update the power domain to match the new clock speed
+	// In theory this should happen before the clock registers are actually set, but practice seems okay
+	// and it's easier to do this after we calculate final SYSCLK
+	proc_set_powermode(ACTIVEMODE);
+
     return SUCCESS;
+}
+
+void platform_proc_sleep()
+{
+    // Enter LPM0 power domain - note that we could modify to enter LPM3, 3.5, 4, or 5 if desired
+    // but currently we continue using LPM0 for ~30% power consumption of active, but still quick wakeup
+    proc_set_powermode(LPM0);
+    // Sleep
+    __sleep();  // Just issues an ARM wfi instruction (wait for interrupt) and goes to sleep
+}
+
+void proc_set_powermode(proc_power_mode mode)
+{
+    uint32_t modebits = 0;
+    switch(proc_power_mode)
+    {
+        case ACTIVEMODE:
+        case LPM0:
+            if(PLATFORM_SYSCLK > 24000000) modebits = PCM_CTL0_AMR__AM_LDO_VCORE1;
+            else modebits = PCM_CTL0_AMR__AM_LDO_VCORE0;
+
+            while((PCM->CTL1 & PCM_CTL1_PMR_BUSY));
+            PCM->CTL0 = PCM_CTL0_KEY_VAL | modebits;
+            while((PCM->CTL1 & PCM_CTL1_PMR_BUSY));
+            break;
+    }
 }
 
 #endif  /* defined(__MSP432P401R__) */
