@@ -12,18 +12,18 @@
 #ifndef SCHEDULER_SCHEDULER_H_
 #define SCHEDULER_SCHEDULER_H_
 
-/*
+/*====================================
  * Constant definitions
- */
+ *====================================*/
 #define TASK_IDX uint8_t
 #define MAX_TASKS 255
 
-/*
+/*====================================
  * Data Types
- */
+ *====================================*/
 
 /**
- * Priority
+ * Priority enumeration for all tasks
  */
 typedef enum {
 	LOWEST,
@@ -39,23 +39,28 @@ typedef enum {
  * 	- Argument details: data contract must be worked out between thread adding job and job being added, since args is just a reference
  */
 typedef struct {
+    // Requirements for this task
 	TCB_PRIORITY priority;			///< Priority for this task
 	void (*callback)(uint32_t);		///< Function pointer to this task's entry point, with argument parameter
 	uint32_t args;					///< Reference to the start location of the arguments
-	uint32_t period;				///< Period of this task in milliseconds. 0 if task is a one-off
+	uint32_t period;				    ///< Period of this task in milliseconds. 0 if task is a one-off
 	uint16_t exec;					///< Job execution time in milliseconds. 1ms if < 1ms to execute
 	bool need_exec;					///< Whether or not this job is currently awaiting execution
+
+	// Doubly-linked list support
+	TASK_IDX prev;                  ///< Previous, higher priority job
+	TASK_IDX next;                  ///< Next, lower priority job
 } SCH_TCB;
 
-/*
+/*====================================
  * Variables
- */
+ *====================================*/
 extern uint64_t SCH_TICKS;					///< Current system time measured as number of ticks, which is definable per platform but should be 1ms
 extern SCH_TCB SCH_TASK_QUEUE[MAX_TASKS];	///< All tasks currently being managed by the scheduler
 
-/*
+/*====================================/
  * Functions
- */
+ *====================================*/
 
 /**
  * @brief Add a new task to be considered for execution

@@ -36,6 +36,7 @@ void schInterrupt()
 		// Check if a job is up for release - note that this is dependent on the job periods being a
 		// multiple of tick size, otherwise this may never release a job. At creation everything is
 		// aimed at periods being millisecond resolution for a 1ms tick size.
+	    // TODO: This check could definitely be more robust
 		if(SCH_TASK_QUEUE[i].period % SCH_TICKS == 0)
 		{
 			SCH_TASK_QUEUE[i].need_exec = true;
