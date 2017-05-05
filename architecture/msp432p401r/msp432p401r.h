@@ -20,9 +20,10 @@ typedef enum {
     ACTIVEMODE,
     LPM0
 } proc_power_mode;
+
 /**
  * @param mode One of the system power modes
  */
-extern void proc_set_power_mode(proc_power_mode mode);
+extern void proc_set_powermode(proc_power_mode mode);
 
 #endif /* ARCHITECTURE_MSP432P401R_MSP432P401R_H_ */

@@ -18,6 +18,7 @@
 
 #include "include/error.h"
 #include "architecture/platform.h"
+#include "scheduler/scheduler.h"
 
 uint32_t PLATFORM_SYSCLK;
 
@@ -27,7 +28,14 @@ err_t platform_proc_init()
 
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;	// Unlock the watchdog timer and issue a hold to shut it off
 
-    __enable_interrupts();      // Globally enable interrupts
+    __enable_irq();      // Globally enable interrupts
+
+    // Set up the timer interrupt for the scheduler tick on Timer A0
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
+    TIMER_A0->CCR[0] = 50000;
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | TIMER_A_CTL_MC__UP;
 
     return SUCCESS;
 }
@@ -100,7 +108,7 @@ void platform_proc_sleep()
 void proc_set_powermode(proc_power_mode mode)
 {
     uint32_t modebits = 0;
-    switch(proc_power_mode)
+    switch(mode)
     {
         case ACTIVEMODE:
         case LPM0:
@@ -112,6 +120,11 @@ void proc_set_powermode(proc_power_mode mode)
             while((PCM->CTL1 & PCM_CTL1_PMR_BUSY));
             break;
     }
+}
+
+void TA0_0_IRQHandler(void)
+{
+    schInterrupt();
 }
 
 #endif  /* defined(__MSP432P401R__) */
