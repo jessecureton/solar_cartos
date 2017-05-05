@@ -49,6 +49,7 @@ extern uint32_t PLATFORM_SYSCLK;
  * - Watchdog timer disabled
  * - Global interrupts enabled
  * - {@link PLATFORM_SYSCLK} updated to default speed for processor at RESET
+ * - Configure a timer for platform_sch_tick() per the platform spec
  *
  * @return A {@link err_t system error code}
  */

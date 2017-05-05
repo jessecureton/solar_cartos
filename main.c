@@ -21,12 +21,14 @@ int main(void)
 
     platform_set_sysclk(24000000);
 
+    schInit();
+
     // Execute all available tasks, then put the processor to sleep
     // until its awoken by an interrupt and repeats
     while(1)
     {
-    	schServiceTasks();
-    	platform_proc_sleep();
+        schServiceTasks();
+        platform_proc_sleep();
     }
 	
     return 0;

@@ -25,6 +25,7 @@ typedef uint8_t err_t;
  */
 #define SUCCESS             0   ///< Function evaluated without error
 #define EPARAMINVAL         1   ///< A given function parameter was invalid
+#define ENOSPACE            2   ///< A needed element was full
 /** @} */
 
 #endif /* INCLUDE_ERROR_H_ */
