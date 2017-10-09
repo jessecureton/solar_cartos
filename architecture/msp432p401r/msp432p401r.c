@@ -30,12 +30,20 @@ err_t platform_proc_init()
 
     __enable_irq();      // Globally enable interrupts
 
+    // Set the proper clock domains for standalone operation of all clocks
+    // MCLK, SMCLK, and HSMCLK are all DCO by default
+    CS->KEY = CS_KEY_VAL;
+    CS->CLKEN |= CS_CLKEN_REFO_EN;  // Enable REF0CLK
+    CS->CTL1 |= CS_CTL1_SELA__REFOCLK | CS_CTL1_SELB;    //ACLK and BCLK both to REF0CLK source
+    CS->KEY = 0;
+
     // Set up the timer interrupt for the scheduler tick on Timer A0
+    // We use ACLK as the source because it won't change wrt SYSCLK like MCLK/HSMCLK/SMCLK
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-    TIMER_A0->CCR[0] = 50000;
-    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | TIMER_A_CTL_MC__UP;
+    TIMER_A0->CCR[0] = 32;  // 32768Hz works out to ~32 timer ticks for 1ms. Experimentally 32 was closer than 33.
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | TIMER_A_CTL_MC__UP;
 
     return SUCCESS;
 }
@@ -124,6 +132,7 @@ void proc_set_powermode(proc_power_mode mode)
 
 void TA0_0_IRQHandler(void)
 {
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
     schInterrupt();
 }
 
