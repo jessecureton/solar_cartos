@@ -23,7 +23,7 @@ int main(void)
     // If the application defines a clock frequency run at that speed.'
     // If not, the platform is expected to be running at some default after init.
     #ifdef APP_CLOCK_FREQ
-        ASSERT(platform_set_sysclk(APP_CLOCK_FREQ));
+        ASSERT(platform_set_sysclk(APP_SYSCLK_FREQ));
     #endif
 
     schInit();

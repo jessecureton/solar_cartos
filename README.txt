@@ -10,7 +10,7 @@
  * @section PROJECT_INTRO Introduction
  * 
  * @section PROJECT_GET_STARTED Getting Started with the Solar CaRTOS
- * Details on implementing this with an application: git submoduling, adding to project, linker/makefiles, etc
+ * Details on implementing this with an application: git submoduling, adding to project, OS structure, templates
  * 
  * @section PROJECT_LICENSE License and Copyright
  * Copyright (C) 2017 - Jesse Cureton

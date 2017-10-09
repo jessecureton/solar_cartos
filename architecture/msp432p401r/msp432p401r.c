@@ -30,6 +30,8 @@ err_t platform_proc_init()
 
     __enable_irq();      // Globally enable interrupts
 
+    /* TODO: Configure to use external switching supply if present. Is there a way to check if present? */
+
     // Set the proper clock domains for standalone operation of all clocks
     // MCLK, SMCLK, and HSMCLK are all DCO by default
     CS->KEY = CS_KEY_VAL;
@@ -48,6 +50,9 @@ err_t platform_proc_init()
     return SUCCESS;
 }
 
+/* TODO: Need a way to logically set up, calculate, and store the (H)SMCLK frequencies here
+ * Also configure the DCO to try and use the external resistor unless it is faulted
+ */
 err_t platform_set_sysclk(uint32_t hertz)
 {
 	// Error out if we are out of bounds
@@ -118,6 +123,8 @@ void proc_set_powermode(proc_power_mode mode)
     uint32_t modebits = 0;
     switch(mode)
     {
+        // Intentional fall-through. This sets the power state based on SYSCLK, but we actually
+        // enter LPM0 with a __sleep() call or ARM "wfi" instruction.
         case ACTIVEMODE:
         case LPM0:
             if(PLATFORM_SYSCLK > 24000000) modebits = PCM_CTL0_AMR__AM_LDO_VCORE1;

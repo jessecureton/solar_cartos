@@ -1,0 +1,52 @@
+/**
+ * @file application_interface.txt
+ * @author Jesse Cureton (jlcvm6@mst.edu)
+ * @date 8 October 2017
+ * @copyright Copyright 2017 - Jesse Cureton. All rights reserved.
+ * @license This project is released under the GNU Public License (GPLv3).
+ *
+ * @page APPLICATION_INTERFACE Application Interface
+ * Applications for the Solar CaRTOS are kind of a super-set of the OS itself - the OS can build without an app
+ * wrapper, but it does nothing but boot up and infinite loop. The application directory contains the OS as a Git
+ * submodule allowing it to be freely updated from mainline, but the code entry point for main() is within the OS.
+ * \n\n
+ * This means that while the application builds the OS concurrently, the OS itself calls the application. This means
+ * the app must have some pre-defined entry point for the OS to call. <strong>Each application must define a 
+ * <code>void appInit()</code> as its startup function.</strong> The OS will call this after platform initialization,
+ * and the application is expected to spawn any tasks it needs here. If the app doesn't define any recurring tasks,
+ * control doesn't ever return to the app after appInit() is called. This means the high-level OS flow looks
+ * something like this:
+ * @dot
+ * digraph G {
+ * reset [shape=plaintext];
+ * interrupt [shape=plaintext,label="SCH_TICK interrupt wakeup"];
+ * mainloop [shape=plaintext,label="while(1)"];
+ * sleep [shape=plaintext,label="Low power sleep"];
+ * main [shape=box,label="main()"];
+ * platinit [shape=box,label="Platform Initialization\n\nplatform_proc_init()\nplatform_set_sysclk()\n"];
+ * schInit [shape=box,label="schInit()\n\nEmpty out task array,\nprepare for execution"];
+ * platinterrupt [shape=box,label="platform_sch_tick()"];
+ * appInit [shape=box,label="appInit()\n\nInitialize the application &\nits recurring tasks"];
+ * schInterrupt [shape=box,label="schInterrupt()\n\nRelease any jobs up for execution\non this tick"];
+ * schServiceTasks [shape=box,label="schServiceTasks()\n\nExecute released tasks &\nupdate executed task statuses"];
+ * platsleep [shape=box,label="platform_proc_sleep()\n\nEnter low power mode as defined for processor"];
+ *
+ * reset->main [style=dotted];
+ * main->platinit->schInit->appInit->mainloop->schServiceTasks->platsleep
+ * interrupt->platinterrupt [style=dotted];
+ * platinterrupt->schInterrupt;
+ * schInterrupt->mainloop [style=dotted,label="Not a direct call but since\nprocessor is awake from interrupt,\ncontrol returns to the main loop"];
+ * platsleep->sleep [style=dotted];
+ * }
+ * @enddot
+ *
+ * @section APPLICATION_CONFIGURATION Standard Configuration Values
+ * The application is able to define a set of standard configuration values for the operating system's CORE
+ * module. These values are detailed below. The application isn't required to define any of these - there
+ * platform is required to initialize them to sane values, but they provide the application with simple #define
+ * options for many standard configurations. These values are implemented in the CORE module, but other system
+ * modules may also define their own set of configuration options exposed to application.h as well.
+ *
+ * 1. <code>APP_SYSCLK_FREQ</code> - The application's desired SYSCLK frequency in Hertz
+ *
+ */
