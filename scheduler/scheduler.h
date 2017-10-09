@@ -49,11 +49,11 @@ typedef enum {
  */
 typedef struct {
     // Requirements for this task
-    TCB_STATUS status;               ///< Status of this task
+    TCB_STATUS status;              ///< Status of this task
 	TCB_PRIORITY priority;			///< Priority for this task
 	void (*callback)(uint32_t);		///< Function pointer to this task's entry point, with argument parameter
 	uint32_t args;					///< Reference to the start location of the arguments
-	uint32_t period;				    ///< Period of this task in milliseconds. 0 if task is a one-off
+	uint32_t period;				///< Period of this task in milliseconds. 0 if task is a one-off
 	uint16_t exec;					///< Job execution time in milliseconds. 1ms if < 1ms to execute
 
 	// Doubly-linked list support
