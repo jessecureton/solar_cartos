@@ -11,6 +11,8 @@
 #ifndef INCLUDE_ERROR_H_
 #define INCLUDE_ERROR_H_
 
+#include <stdint.h>
+
 /**
  * Error type - one of the global {@link ERR_CODES error codes}
  */
