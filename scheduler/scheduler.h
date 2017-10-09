@@ -12,6 +12,8 @@
 #ifndef SCHEDULER_SCHEDULER_H_
 #define SCHEDULER_SCHEDULER_H_
 
+#include <stddef.h>     // Needed to get NULL definition
+
 /*====================================
  * Constant definitions
  *====================================*/
@@ -67,8 +69,8 @@ typedef struct {
  *====================================*/
 extern uint64_t SCH_TICKS;					///< Current system time measured as number of ticks, which is definable per platform but should be 1ms
 extern SCH_TCB SCH_TASK_QUEUE[MAX_TASKS];	///< All tasks currently being managed by the scheduler
-extern TASK_IDX SCH_QUEUE_HEAD;              ///< The index of the highest priority job in the {@link SCH_TASK_QUEUE}
-extern TASK_IDX SCH_NUM_JOBS;                ///< The number of jobs currently active in the system
+extern TASK_IDX SCH_QUEUE_HEAD;             ///< The index of the highest priority job in the {@link SCH_TASK_QUEUE}
+extern TASK_IDX SCH_NUM_JOBS;               ///< The number of jobs currently active in the system
 
 /*====================================/
  * Functions
@@ -118,8 +120,5 @@ extern void schInit();
  * @param task The task ID to remove
  */
 extern void schRemoveTask(TASK_IDX task);
-
-
-
 
 #endif /* SCHEDULER_SCHEDULER_H_ */

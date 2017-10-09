@@ -19,6 +19,7 @@ uint64_t SCH_TICKS = 0;
 SCH_TCB SCH_TASK_QUEUE[MAX_TASKS];
 TASK_IDX SCH_QUEUE_HEAD = 0;
 TASK_IDX SCH_NUM_JOBS = 0;
+bool INITIALIZED = false;
 
 err_t schAddTask(TCB_PRIORITY priority, void (*callback)(uint32_t), uint32_t args, uint32_t period, uint16_t exec)
 {
@@ -99,6 +100,8 @@ void schServiceTasks()
 
 void schInterrupt()
 {
+    if(!INITIALIZED) return;
+
 	SCH_TICKS++;
 
 	TASK_IDX current = SCH_QUEUE_HEAD;
@@ -108,7 +111,7 @@ void schInterrupt()
         // multiple of tick size, otherwise this may never release a job. At creation everything is
         // aimed at periods being millisecond resolution for a 1ms tick size.
         // TODO: This check could definitely be more robust
-        if(SCH_TASK_QUEUE[current].status == WAITING && SCH_TASK_QUEUE[current].period % SCH_TICKS == 0)
+        if(SCH_TASK_QUEUE[current].status == WAITING && SCH_TICKS % SCH_TASK_QUEUE[current].period == 0)
         {
             SCH_TASK_QUEUE[current].status = EXECUTABLE;
         }
@@ -123,6 +126,8 @@ void schInit()
     {
         SCH_TASK_QUEUE[i].status = EMPTY;
     }
+
+    INITIALIZED = true;
 }
 
 void schRemoveTask(TASK_IDX task)
