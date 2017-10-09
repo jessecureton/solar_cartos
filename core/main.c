@@ -26,9 +26,9 @@ int main(void)
         ASSERT(platform_set_sysclk(APP_CLOCK_FREQ));
     #endif
 
-    appInit();
-
     schInit();
+
+    appInit();
 
     // Execute all available tasks, then put the processor to sleep
     // until its awoken by an interrupt and repeats
