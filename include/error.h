@@ -26,6 +26,30 @@ typedef uint8_t err_t;
 #define SUCCESS             0   ///< Function evaluated without error
 #define EPARAMINVAL         1   ///< A given function parameter was invalid
 #define ENOSPACE            2   ///< A needed element was full
+#define EUNIMPLEMENTED      3   ///< Function isn't implemented on this platform
 /** @} */
+
+/**
+ * @brief Halt OS execution on an error
+ *
+ * This should only be called by the {@link ASSERT} operator.
+ *
+ * @param file The __FILE__ ID where the error occurred
+ * @param line The __LINE__ ID where the error occurred
+ * @param error An {@link err_t} describing the error
+ */
+extern void ERR_TRAP(char *file, uint32_t line, err_t error);
+
+/**
+ * @brief Assertion operator - Will trap if expr doesn't evaluate to the {@link err_t} type {@link SUCCESS}
+ *
+ * expr should be an expression that returns an {@link err_t}
+ *
+ * Unlike most ASSERT implementations, this is active regardless of if it's a debug or
+ * release build. Will result in stopping execution in a way that the debugger can observe
+ * the location and type of the error.
+ */
+#define ASSERT(expr) err_t val = expr; if(val) ERR_TRAP(__FILE__, __LINE__, val)
+
 
 #endif /* INCLUDE_ERROR_H_ */

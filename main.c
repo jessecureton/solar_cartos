@@ -19,7 +19,7 @@ int main(void)
 {
     platform_proc_init();
 
-    platform_set_sysclk(24000000);
+    ASSERT(platform_set_sysclk(24000000));
 
     schInit();
 
@@ -32,4 +32,9 @@ int main(void)
     }
 	
     return 0;
+}
+
+void ERR_TRAP(char *file, uint32_t line, err_t error)
+{
+    while(1);
 }
